@@ -4,6 +4,7 @@
 %}
 
 DIGIT [0-9]
+LETTER [a-zA-Z]
 
 %%
 
@@ -48,7 +49,7 @@ DIGIT [0-9]
 "<=" {printf("LTE\n"); currPos += yyleng;}
 ">=" {printf("GTE\n"); currPos += yyleng;}
 
-[a-zA-Z]+([a-zA-Z0-9]*"_"*[a-zA-Z0-9])* {printf("INDENT %s\n", yytext); currPos += yyleng;}
+{LETTER}({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT})* {printf("IDENT %s\n", yytext); currPos += yyleng;}
 {DIGIT}+                                {printf("NUMBER %s\n", yytext); currPos += yyleng;}
 
 ";"  {printf("SEMICOLON\n"); currPos += yyleng;}
