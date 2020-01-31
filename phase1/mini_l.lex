@@ -3,6 +3,8 @@
     int currLine = 1;
 %}
 
+DIGIT [0-9]
+
 %%
 
 "function"    {printf("FUNCTION\n"); currPos+= yyleng;}
@@ -47,7 +49,7 @@
 ">=" {printf("GTE\n"); currPos += yyleng;}
 
 [a-zA-Z]+([a-zA-Z0-9]*"_"*[a-zA-Z0-9])* {printf("INDENT %s\n", yytext); currPos += yyleng;}
-[0-9]+                                  {printf("NUMBER %s\n", yytext); currPos += yyleng;}
+{DIGIT}+                                {printf("NUMBER %s\n", yytext); currPos += yyleng;}
 
 ";"  {printf("SEMICOLON\n"); currPos += yyleng;}
 ":"  {printf("COLON\n"); currPos += yyleng;}
@@ -60,8 +62,9 @@
 
 "##".* {currPos += yyleng;}
 [ ]    {currPos++;}
-[ \t]+ {currPos += yyleng;}
+[ \t]+ {/* ignore spaces */ currPos += yyleng;}
 "\n"   {currLine++; currPos = 1;}
+.      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
 
 %%
 
