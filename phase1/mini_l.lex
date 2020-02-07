@@ -24,8 +24,8 @@ LETTER [a-zA-Z]
 "else"        {printf("ELSE\n"); currPos += yyleng;}
 "while"       {printf("WHILE\n"); currPos += yyleng;}
 "do"          {printf("DO\n"); currPos += yyleng;}
-"beginloop"   {printf("BEGIN_LOOP\n"); currPos += yyleng;}
-"endloop"     {printf("END_LOOP\n"); currPos += yyleng;}
+"beginloop"   {printf("BEGINLOOP\n"); currPos += yyleng;}
+"endloop"     {printf("ENDLOOP\n"); currPos += yyleng;}
 "continue"    {printf("CONTINUE\n"); currPos += yyleng;}
 "read"        {printf("READ\n"); currPos += yyleng;}
 "write"       {printf("WRITE\n"); currPos += yyleng;}
@@ -35,6 +35,7 @@ LETTER [a-zA-Z]
 "true"        {printf("TRUE\n"); currPos += yyleng;}
 "false"       {printf("FALSE\n"); currPos += yyleng;}
 "return"      {printf("RETURN\n"); currPos += yyleng;}
+"for"         {printf("FOR\n"); currPos += yyleng;}
 
 "+" {printf("ADD\n"); currPos += yyleng;}
 "-" {printf("SUB\n"); currPos += yyleng;}
@@ -49,7 +50,7 @@ LETTER [a-zA-Z]
 "<=" {printf("LTE\n"); currPos += yyleng;}
 ">=" {printf("GTE\n"); currPos += yyleng;}
 
-{LETTER}({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT})* {printf("IDENT %s\n", yytext); currPos += yyleng;}
+{LETTER}({LETTER}|{DIGIT}*"_"*{LETTER}|{DIGIT})* {printf("IDENT %s\n", yytext); currPos += yyleng;}
 {DIGIT}+                                {printf("NUMBER %s\n", yytext); currPos += yyleng;}
 
 ";"  {printf("SEMICOLON\n"); currPos += yyleng;}
@@ -66,6 +67,8 @@ LETTER [a-zA-Z]
 [ \t]+ {/* ignore spaces */ currPos += yyleng;}
 "\n"   {currLine++; currPos = 1;}
 .      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
+({DIGIT}|_){LETTER}+({LETTER}|{DIGIT}|_)*  {printf("Error at line %d, column %d: invalid identifier \"%s\"\n", currLine, currPos, yytext); exit(0);}
+{LETTER}+({LETTER}|{DIGIT})*"_" {printf("Error at line %d, column %d: invalid identifier \"%s\"\n", currLine, currPos, yytext); exit(0);}
 
 %%
 
