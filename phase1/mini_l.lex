@@ -50,7 +50,7 @@ LETTER [a-zA-Z]
 "<=" {printf("LTE\n"); currPos += yyleng;}
 ">=" {printf("GTE\n"); currPos += yyleng;}
 
-{LETTER}({LETTER}|{DIGIT}*"_"*{LETTER}|{DIGIT})* {printf("IDENT %s\n", yytext); currPos += yyleng;}
+{LETTER}+(({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT}))* {printf("IDENT %s\n", yytext); currPos += yyleng;}
 {DIGIT}+                                {printf("NUMBER %s\n", yytext); currPos += yyleng;}
 
 ";"  {printf("SEMICOLON\n"); currPos += yyleng;}
@@ -67,8 +67,8 @@ LETTER [a-zA-Z]
 [ \t]+ {/* ignore spaces */ currPos += yyleng;}
 "\n"   {currLine++; currPos = 1;}
 .      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
-({DIGIT}|_){LETTER}+({LETTER}|{DIGIT}|_)*  {printf("Error at line %d, column %d: invalid identifier \"%s\"\n", currLine, currPos, yytext); exit(0);}
-{LETTER}+({LETTER}|{DIGIT})*"_" {printf("Error at line %d, column %d: invalid identifier \"%s\"\n", currLine, currPos, yytext); exit(0);}
+({DIGIT}|"_")*({LETTER}|{DIGIT}|"_")*  {printf("Error at line %d, column %d: identifier starting with invalid symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
+{LETTER}+(({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT}))*"_" {printf("Error at line %d, column %d: identifier cannot end with an underscore \"%s\"\n", currLine, currPos, yytext); exit(0);}
 
 %%
 
