@@ -104,9 +104,11 @@ statement: var ASSIGN expression {printf("statement -> var ASSIGN expression\n")
            | IF bool_exp THEN statements ELSE statements ENDIF{printf("statement -> IF bool_exp THEN statements ELSE statements ENDIF\n");}
            | WHILE bool_exp BEGINLOOP statements ENDLOOP {printf("statement -> WHILE bool_exp BEGINLOOP statements ENDLOOP\n");}
            | DO BEGINLOOP statements ENDLOOP WHILE bool_exp {printf("statement -> DO BEGINLOOP statements ENDLOOP WHILE bool_exp\n");}
-           | FOREACH ident IN ident BEGINLOOP statements ENDLOOP {printf("statement -> FOREACH IDENT IN IDENT BEGINLOOP statements ENDLOOP\n");}
-           | READ vars {printf("statement -> READ vars\n");}| WRITE vars {printf("statement -> WRITE vars\n");}
-           | CONTINUE {printf("statement -> CONTINUE\n");}| RETURN expression {printf("statement -> RETURN expression\n");}
+           | FOR vars ASSIGN NUMBER bool_exp vars ASSIGN BEGINLOOP statements ENDLOOP {printf("statement -> FOR vars ASSIGN NUMBER bool_exp vars ASSIGN BEGINLOOP statements ENDLOOP\n");}
+           | READ vars {printf("statement -> READ vars\n");}
+           | WRITE vars {printf("statement -> WRITE vars\n");}
+           | CONTINUE {printf("statement -> CONTINUE\n");}
+           | RETURN expression {printf("statement -> RETURN expression\n");}
 ;
 
 bool_exp: relation_and_exp {printf("bool_exp -> relation_and_exp\n");}
