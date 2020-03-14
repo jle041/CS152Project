@@ -1,0 +1,1 @@
+Project is not completed. There is a segmentation fault that occurs when running "cat fibonacci.min | my_compiler", where fibonacci.min is the test file and my_compiler is the executable. To run the Makefile, type "make". "make clean" can also be run to remove files created after running "make".
