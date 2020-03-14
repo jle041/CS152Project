@@ -1,5 +1,6 @@
 %{
 #include "y.tab.h"
+char* newProgram;
 int currPos = 1;
 int currLine = 1;
 %}
@@ -51,8 +52,8 @@ LETTER [a-zA-Z]
 "<=" {return LTE; currPos += yyleng;}
 ">=" {return GTE; currPos += yyleng;}
 
-{LETTER}+(({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT}))* {strcpy(yylval.char_val, yytext); return IDENT; currPos += yyleng;}
-{DIGIT}+                                {yylval.int_val = atoi(yytext); return NUMBER; currPos += yyleng;}
+{LETTER}+(({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT}))* {yylval.op_val = yytext; return IDENT; currPos += yyleng;}
+{DIGIT}+                                {yylval.val = atoi(yytext); return NUMBER; currPos += yyleng;}
 
 ";"  {return SEMICOLON; currPos += yyleng;}
 ":"  {return COLON; currPos += yyleng;}
@@ -72,3 +73,23 @@ LETTER [a-zA-Z]
 {LETTER}+(({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT}))*"_" {printf("Error at line %d, column %d: identifier cannot end with an underscore \"%s\"\n", currLine, currPos, yytext); exit(0);}
 
 %%
+
+int yyparse();
+
+int main(int argc, char* argv[]) {
+    if (argc ==2) {
+        yyin = fopen(argv[1], "r");
+        if (yyin == 0) {
+            printf("Error opening file: %s\n", argv[1]);
+            exit(1);
+            }
+    }
+    else {
+        yyin = stdin;
+    }
+
+    newProgram = strdup(argv[1]);
+
+    yyparse();
+    return 0;
+}
