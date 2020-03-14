@@ -68,21 +68,21 @@ LETTER [a-zA-Z]
 [ ]    {currPos++;}
 [ \t]+ {/* ignore spaces */ currPos += yyleng;}
 "\n"   {currLine++; currPos = 1;}
-.      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
-({DIGIT}|"_")+({LETTER}|{DIGIT}|"_")*  {printf("Error at line %d, column %d: identifier starting with invalid symbol \"%s\"\n", currLine, currPos, yytext); exit(0);}
-{LETTER}+(({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT}))*"_" {printf("Error at line %d, column %d: identifier cannot end with an underscore \"%s\"\n", currLine, currPos, yytext); exit(0);}
+.      {printf("Error at line %d, column %d: unrecognized symbol \"%s\"\n", currLine, currPos, yytext); exit(1);}
+({DIGIT}|"_")+({LETTER}|{DIGIT}|"_")*  {printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter \n", currLine, currPos, yytext); exit(1);}
+{LETTER}+(({LETTER}|{DIGIT})*"_"*({LETTER}|{DIGIT}))*"_" {printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore \n", currLine, currPos, yytext); exit(1);}
 
 %%
 
 int yyparse();
 
 int main(int argc, char* argv[]) {
-    if (argc ==2) {
+    if (argc == 2) {
         yyin = fopen(argv[1], "r");
         if (yyin == 0) {
             printf("Error opening file: %s\n", argv[1]);
             exit(1);
-            }
+        }
     }
     else {
         yyin = stdin;
